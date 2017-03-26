@@ -18,4 +18,10 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+    <managed-bean>
+        <description>List of genres</description>
+        <managed-bean-name>genres</managed-bean-name>
+        <managed-bean-class>beans.Genres</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
 </faces-config>
