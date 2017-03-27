@@ -26,9 +26,10 @@ public class Book extends Item {
     private String isbn;
     private String genre;
     private String author;
-    private Date publishYear;
+    private int publishYear;
     private String publisher;
     private byte[] image;
+    private String description;
     
     public Book() {
         super();
@@ -38,7 +39,7 @@ public class Book extends Item {
         super(name);
     }
 
-    public Book(String name, int id, int pageCount, String isbn, String genre, String author, Date publishYear, String publisher) {
+    public Book(String name, int id, int pageCount, String isbn, String genre, String author, int publishYear, String publisher) {
         super();
         this.name = name;
         this.id = id;
@@ -90,11 +91,11 @@ public class Book extends Item {
         this.author = author;
     }
 
-    public Date getPublishYear() {
+    public int getPublishYear() {
         return publishYear;
     }
 
-    public void setPublishYear(Date publishYear) {
+    public void setPublishYear(int publishYear) {
         this.publishYear = publishYear;
     }
 
@@ -118,6 +119,16 @@ public class Book extends Item {
     public void setImage(byte[] image) {
         this.image = image;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    
     
     public void fillPdfContent() {
         String query = "SELECT `content` FROM `book` WHERE `id` = " + this.id + " LIMIT 0,1;";

@@ -31,7 +31,7 @@ public class Books extends EntityList<Book> {
     private ArrayList<Book> bookList;
     
     public ArrayList<Book> getBookList() {
-        String query = "SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, \n" +
+        String query = "SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, b.descr, \n" +
         "p.name AS publisher, a.fio AS author, g.name AS genre\n" +
         "FROM \n" +
         "`book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
@@ -44,7 +44,7 @@ public class Books extends EntityList<Book> {
     }
     
     public ArrayList<Book> getBooksByGenre(long id) {
-        String query = "SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, \n" +
+        String query = "SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, b.descr, \n" +
         "p.name AS publisher, a.fio AS author, g.name AS genre\n" +
         "FROM \n" +
         "`book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
@@ -59,7 +59,7 @@ public class Books extends EntityList<Book> {
     }
     
     public ArrayList<Book> getBooksByLetter(String letter) {
-        String query = "SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, \n" +
+        String query = "SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, b.descr, \n" +
         "p.name AS publisher, a.fio AS author, g.name AS genre\n" +
         "FROM \n" +
         "`book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
@@ -76,7 +76,7 @@ public class Books extends EntityList<Book> {
     }
     
     public ArrayList<Book> getBooksBySearch(String search, SearchType searchType) {
-        StringBuilder query = new StringBuilder("SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, \n" +
+        StringBuilder query = new StringBuilder("SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, b.descr, \n" +
         "p.name AS publisher, a.fio AS author, g.name AS genre\n" +
         "FROM \n" +
         "`book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
@@ -107,9 +107,10 @@ public class Books extends EntityList<Book> {
             String isbn = resultSet.getString("isbn");
             String genre = resultSet.getString("genre");
             String author = resultSet.getString("author");
-            Date publishYear = resultSet.getDate("publish_year");
+            int publishYear = resultSet.getInt("publish_year");
             String publisher = resultSet.getString("publisher");
             byte[] image = resultSet.getBytes("image");
+            String description = resultSet.getString("descr");
             
             book.setId(id);
             book.setName(name);
@@ -120,6 +121,7 @@ public class Books extends EntityList<Book> {
             book.setPublishYear(publishYear);
             book.setPublisher(publisher);
             book.setImage(image);
+            book.setDescription(description);
             
         } catch (SQLException e) {
             e.printStackTrace();

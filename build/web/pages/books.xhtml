@@ -15,12 +15,26 @@
             
             <ui:define name="content">
                 <p><strong>Найдено книг: #{searchController.currentBookList.size()}</strong></p>
-                <h:dataTable value="#{searchController.currentBookList}" var="book" >
+                <h:dataTable value="#{searchController.currentBookList}" var="book" styleClass="book_preview">
                     <h:column>
                         <h:graphicImage value="/ShowImage?id=#{searchController.currentBookList.indexOf(book)}" />
                     </h:column>
                     <h:column>
-                        <h3>#{book.name}</h3>
+                        <div>
+                            <p><a href="#">#{book.name}</a></p>
+                            <p><strong>#{msg.author_name} :</strong>#{book.author}</p>
+                            <p><strong>#{msg.page_count} :</strong>#{book.pageCount} #{msg.pages}</p>
+                            <p><strong>#{msg.publisher} :</strong>#{book.publisher}</p>
+                            <p><strong>#{msg.publish_year} :</strong>#{book.publishYear}</p>
+                            
+                            <p><strong>#{msg.isbn} :</strong>#{book.isbn}</p>
+                        </div>
+                    </h:column>
+                    <h:column>
+                        <div class="book_details">
+                            <p><strong>#{msg.descr}</strong></p>
+                            <p>#{book.description}</p>
+                        </div>
                     </h:column>
                 </h:dataTable>
             </ui:define>

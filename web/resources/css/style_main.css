@@ -16,7 +16,7 @@ div.container {
     background-color: #fff;
     margin: 0 auto;
     overflow: hidden;
-    width: 70%;
+    width: 90%;
 }
 
 div.header {
@@ -38,8 +38,6 @@ div.search_letters a, a.genre_link {
     text-decoration: none;
 }
 
-
-
 a.search_letter {
     padding: 3px;
 }
@@ -58,6 +56,26 @@ div.left_menu {
 
 div.content {
     float: left;
+}
+
+table.book_preview {
+    /*width: 65%;*/
+}
+
+table.book_preview td{
+    vertical-align: top;
+}
+
+rable.book_preview td.book_details {
+    width: 30%;
+}
+
+table.book_preview img {
+    max-height: 200px;
+}
+
+table.book_preview p {
+    margin-top: 0;
 }
 
 div.clear {
