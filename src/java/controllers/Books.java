@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package beans;
+package controllers;
 
+import beans.Book;
 import enums.SearchType;
 import java.sql.Date;
 import java.sql.ResultSet;

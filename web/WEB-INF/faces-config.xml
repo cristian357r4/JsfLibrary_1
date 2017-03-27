@@ -18,10 +18,24 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+<!--    <navigation-rule>
+        <from-view-id>/pages/books.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome></from-outcome>
+            <to-view-id>/pages/books.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>-->
     <managed-bean>
         <description>List of genres</description>
-        <managed-bean-name>genres</managed-bean-name>
-        <managed-bean-class>beans.Genres</managed-bean-class>
+        <managed-bean-name>genreController</managed-bean-name>
+        <managed-bean-class>controllers.GenreController</managed-bean-class>
+        
         <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>searchController</managed-bean-name>
+        <managed-bean-class>controllers.SearchController</managed-bean-class>
+        
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 </faces-config>

@@ -9,11 +9,12 @@
     </h:head>
     <h:body>
         <ui:composition>
-<!--            <f:param name="genre_id" value="${request.getAttribute("genre_id")}" />
-            <h:dataTable value="#{books.getBooksByGenre(id)}" var="book">
-                <h3>#{book.name}</h3>
-            </h:dataTable>-->
-            <h3>#{request.getAttribute("genre_id")}</h3>
+            <h:dataTable value="#{searchController.currentBookList}" var="book" >
+                <h:column>
+                    <h3>#{book.name}</h3>
+                </h:column>
+            </h:dataTable>
+            
         </ui:composition>
         
     </h:body>

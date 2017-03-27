@@ -5,10 +5,10 @@
  */
 package controllers;
 
+import beans.Book;
 import enums.SearchType;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -18,12 +18,24 @@ import javax.faces.context.FacesContext;
  *
  * @author Admin
  */
-@Named(value = "searchController")
-@SessionScoped
+
 public class SearchController implements Serializable {
+    private ArrayList<Book> currentBookList;
+    private Books books;
 
     private SearchType searchType;
     private static Map<String, SearchType> searchList = new HashMap<String, SearchType>();
+    
+    private static Character[] russianLetters;
+    
+    static {
+        russianLetters = new Character[33];
+        
+        int i = 0;
+        for (char c = 'А'; c <= 'Я'; c++) {
+            russianLetters[i++] = c;
+        }
+    }
     
     /**
      * Creates a new instance of SearchController
@@ -37,8 +49,43 @@ public class SearchController implements Serializable {
     public SearchType getSearchType() {
         return searchType;
     }
+
+    public void setSearchType(SearchType searchType) {
+        this.searchType = searchType;
+    }
     
     public Map<String, SearchType> getSearchList() {
         return searchList;
+    }
+
+    public ArrayList<Book> getCurrentBookList() {
+        return currentBookList;
+    }
+    
+    public void fillBooksByGenre() {
+        Map<String, String> params = getParams();
+        long id = Long.valueOf(params.get("genre_id"));
+        if (this.books == null)
+            this.books = new Books();
+        this.currentBookList = books.getBooksByGenre(id);
+    }
+    
+    public void fillBooksByLetter() {
+        String letter = getParams().get("search_letter");
+        if (this.books == null)
+            this.books = new Books();
+        this.currentBookList = books.getBooksByLetter(letter);
+    }
+
+    public Character[] getRussianLetters() {
+        return russianLetters;
+    }
+    
+    private Map<String, String> getParams() {
+        return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+    }
+    
+    public byte[] getImage(int id) {
+        return this.currentBookList.get(id).getImage();
     }
 }

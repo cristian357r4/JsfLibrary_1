@@ -20,7 +20,28 @@ div.container {
 }
 
 div.header {
+    border-bottom: 1px solid blue;
     text-align: center;
+}
+
+div.welcome h5 {
+    margin: 5px;
+}
+
+input[type="text"] {
+    width: 75%;
+}
+
+div.search_letters a, a.genre_link {
+    color: #009;
+    font-size: 120%;
+    text-decoration: none;
+}
+
+
+
+a.search_letter {
+    padding: 3px;
 }
 
 div.logo img {
@@ -28,7 +49,7 @@ div.logo img {
 }
 
 div.container div {
-    margin: 5px;
+    margin: 5px 5px 5px 15px;
 }
 
 div.left_menu {
@@ -41,4 +62,10 @@ div.content {
 
 div.clear {
     clear: both;
+}
+
+div.footer {
+    border-top: 1px solid blue;
+    color: background;
+    text-align: center;
 }

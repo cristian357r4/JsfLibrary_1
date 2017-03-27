@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package beans;
+package controllers;
 
+import beans.Genre;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Admin
  */
-public class Genres extends EntityList<Genre>{
+public class GenreController extends EntityList<Genre>{
     private ArrayList<Genre> genreList;
     
     public ArrayList<Genre> getGenreList() {
@@ -27,7 +28,7 @@ public class Genres extends EntityList<Genre>{
     /**
      * Creates a new instance of Genres
      */
-    public Genres() {
+    public GenreController() {
     }
 
     @Override
@@ -41,7 +42,7 @@ public class Genres extends EntityList<Genre>{
             genre = new Genre(name);
             genre.setId(id);
         } catch (SQLException ex) {
-            Logger.getLogger(Genres.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GenreController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return genre;

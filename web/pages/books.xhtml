@@ -13,9 +13,17 @@
                 #{msg.book_list}
             </ui:define>
             
-<!--            <ui:define name="content">
-                Здесь будет список книг
-            </ui:define>-->
+            <ui:define name="content">
+                <p><strong>Найдено книг: #{searchController.currentBookList.size()}</strong></p>
+                <h:dataTable value="#{searchController.currentBookList}" var="book" >
+                    <h:column>
+                        <h:graphicImage value="/ShowImage?id=#{searchController.currentBookList.indexOf(book)}" />
+                    </h:column>
+                    <h:column>
+                        <h3>#{book.name}</h3>
+                    </h:column>
+                </h:dataTable>
+            </ui:define>
         </ui:composition>
     </h:body>
 </html>
