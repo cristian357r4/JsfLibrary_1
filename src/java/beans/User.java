@@ -42,7 +42,7 @@ public class User implements Serializable {
         
         this.userName = null;
         
-        return "/index.xhtml";
+        return "exit";
     }
     
 }

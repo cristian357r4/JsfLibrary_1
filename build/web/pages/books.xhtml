@@ -15,7 +15,7 @@
             
             <ui:define name="content">
                 <p><strong>Найдено книг: #{searchController.currentBookList.size()}</strong></p>
-                <h:dataTable value="#{searchController.currentBookList}" var="book" styleClass="book_preview">
+                <h:dataTable value="#{searchController.currentBookList}" var="book" styleClass="book_preview" columnClasses="col1, col2, col3" rowClasses="row1, row2">
                     <h:column>
                         <h:graphicImage value="/ShowImage?id=#{searchController.currentBookList.indexOf(book)}" />
                     </h:column>

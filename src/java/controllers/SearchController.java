@@ -18,25 +18,26 @@ import javax.faces.context.FacesContext;
  *
  * @author Admin
  */
-
 public class SearchController implements Serializable {
+
     private ArrayList<Book> currentBookList;
-    private Books books;
+    private Books books = new Books();
 
     private SearchType searchType;
+    private String searchString;
     private static Map<String, SearchType> searchList = new HashMap<String, SearchType>();
-    
+
     private static Character[] russianLetters;
-    
+
     static {
         russianLetters = new Character[33];
-        
+
         int i = 0;
         for (char c = 'А'; c <= 'Я'; c++) {
             russianLetters[i++] = c;
         }
     }
-    
+
     /**
      * Creates a new instance of SearchController
      */
@@ -45,7 +46,7 @@ public class SearchController implements Serializable {
         searchList.put(bundle.getString("author_name"), SearchType.AUTHOR);
         searchList.put(bundle.getString("book_name"), SearchType.TITLE);
     }
-    
+
     public SearchType getSearchType() {
         return searchType;
     }
@@ -53,7 +54,15 @@ public class SearchController implements Serializable {
     public void setSearchType(SearchType searchType) {
         this.searchType = searchType;
     }
-    
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
+    }
+
     public Map<String, SearchType> getSearchList() {
         return searchList;
     }
@@ -61,30 +70,40 @@ public class SearchController implements Serializable {
     public ArrayList<Book> getCurrentBookList() {
         return currentBookList;
     }
-    
+
+    public void fillBooksAll() {
+        this.currentBookList = books.getBookList();
+    }
+
     public void fillBooksByGenre() {
         Map<String, String> params = getParams();
         long id = Long.valueOf(params.get("genre_id"));
-        if (this.books == null)
-            this.books = new Books();
+
         this.currentBookList = books.getBooksByGenre(id);
     }
-    
+
     public void fillBooksByLetter() {
         String letter = getParams().get("search_letter");
-        if (this.books == null)
-            this.books = new Books();
+
         this.currentBookList = books.getBooksByLetter(letter);
+    }
+
+    public void fillBooksBySearch() {
+        if (searchString == null || "".equals(searchString)) {
+            fillBooksAll();
+        } else {
+            this.currentBookList = books.getBooksBySearch(searchString, searchType);
+        }
     }
 
     public Character[] getRussianLetters() {
         return russianLetters;
     }
-    
+
     private Map<String, String> getParams() {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     }
-    
+
     public byte[] getImage(int id) {
         return this.currentBookList.get(id).getImage();
     }
