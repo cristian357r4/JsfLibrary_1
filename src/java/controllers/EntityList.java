@@ -48,7 +48,32 @@ public abstract class EntityList<T> {
     }
     
     protected int getRowCount(String query) {
-        return 0;
+        
+        int startPredicat = query.toUpperCase().indexOf(" FROM ") + 1;
+        int endPredicat = query.toUpperCase().indexOf(" LIMIT ");
+        
+        String predicat = query.substring(startPredicat, endPredicat);
+
+        String subQuery = "SELECT COUNT(*) AS rowcount " + predicat;
+        
+        Connection conn = Database.getConnection();
+        
+        int result = 0;
+        
+        try (
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(subQuery);
+                ) {
+            
+            while (rs.next()) {
+                result = rs.getInt("rowcount");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(EntityList.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return result;
     }
     
     public abstract T getNewInstance(ResultSet resultSet);

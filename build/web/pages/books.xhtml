@@ -15,14 +15,14 @@
             </ui:define>
             
             <ui:define name="content">
-                <p><strong>Найдено книг: #{searchController.currentBookList.size()}</strong></p>
+                <p><strong>Найдено книг: #{searchController.totalBookCount}</strong></p>
                 <h:dataTable value="#{searchController.currentBookList}" var="book" styleClass="book_preview" columnClasses="col1, col2, col3" rowClasses="row1, row2">
                     <h:column>
                         <h:graphicImage value="/ShowImage?id=#{searchController.currentBookList.indexOf(book)}" />
                     </h:column>
                     <h:column>
                         <div>
-                            <p><a href="#">#{book.name}</a></p>
+                            <p><a href="book_view.jsp?index=#{book.id}">#{book.name}</a></p>
                             <p><strong>#{msg.author_name}: </strong>#{book.author}</p>
                             <p><strong>#{msg.page_count}: </strong>#{book.pageCount} #{msg.pages}</p>
                             <p><strong>#{msg.publisher}: </strong>#{book.publisher}</p>

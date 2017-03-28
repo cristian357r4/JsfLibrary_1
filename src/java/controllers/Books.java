@@ -26,6 +26,7 @@ public class Books extends EntityList<Book> {
     private int QUERY_COUNT_LIMIT = 5;
     
     private String lastQuery;
+    private int lastRowCount;
 
     /**
      * Creates a new instance of Books
@@ -38,80 +39,90 @@ public class Books extends EntityList<Book> {
     
     public ArrayList<Book> getBookList(int ... limits) {
         String query = "SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, b.descr, \n" +
-        "p.name AS publisher, a.fio AS author, g.name AS genre\n" +
-        "FROM \n" +
-        "`book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
-        "INNER JOIN `genre` AS g on b.genre_id=g.id\n" +
-        "INNER JOIN `publisher` AS p ON b.publisher_id=p.id\n";
+        " p.name AS publisher, a.fio AS author, g.name AS genre\n" +
+        " FROM \n" +
+        " `book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
+        " INNER JOIN `genre` AS g on b.genre_id=g.id\n" +
+        " INNER JOIN `publisher` AS p ON b.publisher_id=p.id \n";
         
         query += addQueryLimit(limits);
         
         lastQuery = query;
         
-        if (bookList == null)
+//        if (bookList == null)
             bookList = getList(query);
+        
+        setLastRowCount();
         
         return bookList;
     }
     
     public ArrayList<Book> getBooksByGenre(long id, int ... limits) {
         String query = "SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, b.descr, \n" +
-        "p.name AS publisher, a.fio AS author, g.name AS genre\n" +
-        "FROM \n" +
-        "`book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
-        "INNER JOIN `genre` AS g on b.genre_id=g.id\n" +
-        "INNER JOIN `publisher` AS p ON b.publisher_id=p.id\n" +
-        "WHERE\n" +
-        "b.genre_id=%d\n" +
-        "ORDER BY b.name\n";
+        " p.name AS publisher, a.fio AS author, g.name AS genre\n" +
+        " FROM \n" +
+        " `book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
+        " INNER JOIN `genre` AS g on b.genre_id=g.id\n" +
+        " INNER JOIN `publisher` AS p ON b.publisher_id=p.id\n" +
+        " WHERE\n" +
+        " b.genre_id=" + id + "\n" +
+        " ORDER BY b.name \n";
         
         query += addQueryLimit(limits);
         
         lastQuery = query;
         
-        return getList(String.format(query, id));
+        setLastRowCount();
+        
+//        query = String.format(query, id);
+        
+        return getList(query);
     }
     
     public ArrayList<Book> getBooksByLetter(String letter, int ... limits) {
         String query = "SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, b.descr, \n" +
-        "p.name AS publisher, a.fio AS author, g.name AS genre\n" +
-        "FROM \n" +
-        "`book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
-        "INNER JOIN `genre` AS g on b.genre_id=g.id\n" +
-        "INNER JOIN `publisher` AS p ON b.publisher_id=p.id\n" +
-        "WHERE\n" +
-        "UPPER(SUBSTR(b.name, 1, 1)) = '%s' \n" +
-        "ORDER BY b.name\n";
+        " p.name AS publisher, a.fio AS author, g.name AS genre\n" +
+        " FROM \n" +
+        " `book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
+        " INNER JOIN `genre` AS g on b.genre_id=g.id\n" +
+        " INNER JOIN `publisher` AS p ON b.publisher_id=p.id\n" +
+        " WHERE\n" +
+        " UPPER(SUBSTR(b.name, 1, 1)) = '" + letter + "' \n" +
+        " ORDER BY b.name \n";
         
         query += addQueryLimit(limits);
         
-        query = String.format(query, letter.toUpperCase());
+//        query = String.format(query, letter.toUpperCase());
         
         lastQuery = query;
+        
+        setLastRowCount();
         
         return getList(query);
     }
     
     public ArrayList<Book> getBooksBySearch(String search, SearchType searchType, int ... limits) {
         StringBuilder query = new StringBuilder("SELECT b.id, b.name, b.content, b.isbn, b.page_count, b.publish_year, b.image, b.descr, \n" +
-        "p.name AS publisher, a.fio AS author, g.name AS genre\n" +
-        "FROM \n" +
-        "`book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
-        "INNER JOIN `genre` AS g on b.genre_id=g.id\n" +
-        "INNER JOIN `publisher` AS p ON b.publisher_id=p.id\n" +
-        "WHERE\n");
+        " p.name AS publisher, a.fio AS author, g.name AS genre\n" +
+        " FROM \n" +
+        " `book` AS b INNER JOIN `author` AS a ON b.author_id=a.id\n" +
+        " INNER JOIN `genre` AS g on b.genre_id=g.id\n" +
+        " INNER JOIN `publisher` AS p ON b.publisher_id=p.id\n" +
+        " WHERE \n");
         
         if (searchType == SearchType.AUTHOR) {
-            query.append("LOWER(a.fio) like '%" + search.toLowerCase() + "%' ");
+            query.append(" LOWER(a.fio) like '%" + search.toLowerCase() + "%' ");
         } else if (searchType == SearchType.TITLE) {
-            query.append("b.name like '%" + search.toLowerCase() + "%' ");
+            query.append(" b.name like '%" + search.toLowerCase() + "%' ");
         }
         
-        query.append("ORDER BY b.name");
+        query.append(" ORDER BY b.name ");
         
         query.append(addQueryLimit(limits));
         
         lastQuery = query.toString();
+        
+        setLastRowCount();
         
         return getList(query.toString());
     }
@@ -124,6 +135,18 @@ public class Books extends EntityList<Book> {
         return QUERY_COUNT_LIMIT;
     }
 
+    public int getLastRowCount() {
+        return lastRowCount;
+    }
+    
+    protected void setLastRowCount(String query) {
+        this.lastRowCount = getRowCount(query);
+    }
+    
+    protected void setLastRowCount() {
+        this.lastRowCount = getRowCount(lastQuery);
+    }
+    
     public ArrayList<byte[]> getImageList(int startPosition, int countLimit) {
         
         int startPredicat = lastQuery.toUpperCase().indexOf(" FROM ") + 1;
@@ -131,9 +154,9 @@ public class Books extends EntityList<Book> {
         
         String predicat = lastQuery.substring(startPredicat, endPredicat);
         
-        String limits = "LIMIT " + startPosition + ", " + countLimit + ";";
+        String limits = " LIMIT " + startPosition + ", " + countLimit + ";";
         
-        String imageQuery = "SELECT `book.image` " + predicat + " " + limits;
+        String imageQuery = " SELECT book.image " + predicat + " " + limits;
         
         BookImages bookImages = new BookImages();
         
@@ -175,7 +198,7 @@ public class Books extends EntityList<Book> {
     }
     
     private String addQueryLimit(int ... limits) {
-        String result = "LIMIT ";
+        String result = " LIMIT ";
         
         if (limits == null || limits.length == 0)
             result += + QUERY_START_POSITION + ", " + QUERY_COUNT_LIMIT + ";";

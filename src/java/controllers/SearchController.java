@@ -38,9 +38,9 @@ public class SearchController implements Serializable {
         }
     }
     
-    private int booksOnPage = 3;
+    private int booksOnPage = 2;
     private int startPosition = 0;
-    private int endPosition = 3;
+    private int endPosition = 0;
     
     private int totalBookCount;
     
@@ -94,6 +94,7 @@ public class SearchController implements Serializable {
     }
 
     public int getTotalBookCount() {
+        this.totalBookCount = books.getLastRowCount();
         return totalBookCount;
     }
     
@@ -126,14 +127,14 @@ public class SearchController implements Serializable {
         return selectedPageNumber;
     }
     
-    
+//----------------------------------------------------------------------------    
 
     public void fillBooksAll() {
         this.currentBookList = books.getBookList(getLimits());
         
-        this.totalBookCount = currentBookList.size();
-       
-        SearchController.this.setPageNumbers();
+//        this.totalBookCount = books.getLastRowCount();
+//       
+//        this.setPageNumbers();
     }
 
     public void fillBooksByGenre() {
@@ -142,29 +143,29 @@ public class SearchController implements Serializable {
 
         this.currentBookList = books.getBooksByGenre(id);
         
-        this.totalBookCount = currentBookList.size();
+        this.totalBookCount = books.getLastRowCount();
         
-        SearchController.this.setPageNumbers();
+        this.setPageNumbers();
     }
 
     public void fillBooksByLetter() {
         String letter = getParams().get("search_letter");
 
-        this.currentBookList = books.getBooksByLetter(letter);
+        this.currentBookList = books.getBooksByLetter(letter, getLimits());
         
-        this.totalBookCount = currentBookList.size();
+        this.totalBookCount = books.getLastRowCount();
         
-        SearchController.this.setPageNumbers();
+        this.setPageNumbers();
     }
 
     public void fillBooksBySearch() {
         if (searchString == null || "".equals(searchString)) {
             fillBooksAll();
         } else {
-            this.currentBookList = books.getBooksBySearch(searchString, searchType);
+            this.currentBookList = books.getBooksBySearch(searchString, searchType, getLimits());
         }
         
-        this.totalBookCount = currentBookList.size();
+        this.totalBookCount = books.getLastRowCount();
         
         SearchController.this.setPageNumbers();
     }
@@ -183,6 +184,9 @@ public class SearchController implements Serializable {
     
     public void selectPage() {
         this.selectedPageNumber = Integer.valueOf(getParams().get("page_number"));
+        this.startPosition = booksOnPage * (selectedPageNumber - 1);
+//        this.endPosition = startPosition + booksOnPage;
+        fillBooksAll();
     }
     
     private int[] getLimits() {
@@ -192,7 +196,7 @@ public class SearchController implements Serializable {
             result = null;
         else {
             result = new int[2];
-            
+            endPosition = /*startPosition +*/ booksOnPage;
             result[0] = startPosition;
             result[1] = endPosition;
         }
