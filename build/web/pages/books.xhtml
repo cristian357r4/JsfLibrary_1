@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
@@ -22,12 +23,12 @@
                     <h:column>
                         <div>
                             <p><a href="#">#{book.name}</a></p>
-                            <p><strong>#{msg.author_name} :</strong>#{book.author}</p>
-                            <p><strong>#{msg.page_count} :</strong>#{book.pageCount} #{msg.pages}</p>
-                            <p><strong>#{msg.publisher} :</strong>#{book.publisher}</p>
-                            <p><strong>#{msg.publish_year} :</strong>#{book.publishYear}</p>
+                            <p><strong>#{msg.author_name}: </strong>#{book.author}</p>
+                            <p><strong>#{msg.page_count}: </strong>#{book.pageCount} #{msg.pages}</p>
+                            <p><strong>#{msg.publisher}: </strong>#{book.publisher}</p>
+                            <p><strong>#{msg.publish_year}: </strong>#{book.publishYear}</p>
                             
-                            <p><strong>#{msg.isbn} :</strong>#{book.isbn}</p>
+                            <p><strong>#{msg.isbn}: </strong>#{book.isbn}</p>
                         </div>
                     </h:column>
                     <h:column>
@@ -37,6 +38,17 @@
                         </div>
                     </h:column>
                 </h:dataTable>
+                <div class="pagination">
+                    <h:form rendered="#{searchController.totalBookCount > searchController.booksOnPage}" >
+                        #{msg.pagination}: 
+                        
+                        <ui:repeat value="#{searchController.pageNumbers}" var="pageNumber" >
+                            <h:commandLink action="#{searchController.selectPage()}" value="#{pageNumber}" styleClass="#{pageNumber == searchController.selectedPageNumber ? 'selected_page' : ''}" >
+                                <f:param name="page_number" value="#{pageNumber}" />
+                            </h:commandLink>
+                        </ui:repeat>
+                    </h:form>
+                </div>
             </ui:define>
         </ui:composition>
     </h:body>

@@ -47,6 +47,10 @@ public abstract class EntityList<T> {
         return resultList;        
     }
     
+    protected int getRowCount(String query) {
+        return 0;
+    }
+    
     public abstract T getNewInstance(ResultSet resultSet);
 
     protected String getQuery(String table, String criteria, String order, String... fields) {

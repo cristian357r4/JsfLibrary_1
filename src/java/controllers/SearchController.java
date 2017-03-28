@@ -37,6 +37,16 @@ public class SearchController implements Serializable {
             russianLetters[i++] = c;
         }
     }
+    
+    private int booksOnPage = 3;
+    private int startPosition = 0;
+    private int endPosition = 3;
+    
+    private int totalBookCount;
+    
+    private int selectedPageNumber;
+    
+    Integer[] pageNumbers;
 
     /**
      * Creates a new instance of SearchController
@@ -67,12 +77,63 @@ public class SearchController implements Serializable {
         return searchList;
     }
 
+    public int getBooksOnPage() {
+        return booksOnPage;
+    }
+
+    public void setBooksOnPage(int booksOnPage) {
+        this.booksOnPage = booksOnPage;
+    }
+
+    public int getStartPosition() {
+        return startPosition;
+    }
+
+    public void setStartPosition(int startPosition) {
+        this.startPosition = startPosition;
+    }
+
+    public int getTotalBookCount() {
+        return totalBookCount;
+    }
+    
     public ArrayList<Book> getCurrentBookList() {
         return currentBookList;
     }
 
+    public Integer[] getPageNumbers() {
+        return pageNumbers;
+    }
+
+    public void setPageNumbers(Integer[] pageNumbers) {
+        this.pageNumbers = pageNumbers;
+    }
+    
+    public void setPagenumbers(int count) {
+        this.pageNumbers = new Integer[count];
+        
+        for (int i = 0; i < count; i++) {
+            this.pageNumbers[i] = i + 1;
+        }
+    }
+    
+    public void setPageNumbers() {
+        int count = (int) Math.ceil(1.0 * this.totalBookCount / this.booksOnPage);
+        setPagenumbers(count);
+    }
+
+    public int getSelectedPageNumber() {
+        return selectedPageNumber;
+    }
+    
+    
+
     public void fillBooksAll() {
-        this.currentBookList = books.getBookList();
+        this.currentBookList = books.getBookList(getLimits());
+        
+        this.totalBookCount = currentBookList.size();
+       
+        SearchController.this.setPageNumbers();
     }
 
     public void fillBooksByGenre() {
@@ -80,12 +141,20 @@ public class SearchController implements Serializable {
         long id = Long.valueOf(params.get("genre_id"));
 
         this.currentBookList = books.getBooksByGenre(id);
+        
+        this.totalBookCount = currentBookList.size();
+        
+        SearchController.this.setPageNumbers();
     }
 
     public void fillBooksByLetter() {
         String letter = getParams().get("search_letter");
 
         this.currentBookList = books.getBooksByLetter(letter);
+        
+        this.totalBookCount = currentBookList.size();
+        
+        SearchController.this.setPageNumbers();
     }
 
     public void fillBooksBySearch() {
@@ -94,6 +163,10 @@ public class SearchController implements Serializable {
         } else {
             this.currentBookList = books.getBooksBySearch(searchString, searchType);
         }
+        
+        this.totalBookCount = currentBookList.size();
+        
+        SearchController.this.setPageNumbers();
     }
 
     public Character[] getRussianLetters() {
@@ -106,5 +179,24 @@ public class SearchController implements Serializable {
 
     public byte[] getImage(int id) {
         return this.currentBookList.get(id).getImage();
+    }
+    
+    public void selectPage() {
+        this.selectedPageNumber = Integer.valueOf(getParams().get("page_number"));
+    }
+    
+    private int[] getLimits() {
+        int[] result;
+        
+        if (startPosition < 0 || endPosition < 0)
+            result = null;
+        else {
+            result = new int[2];
+            
+            result[0] = startPosition;
+            result[1] = endPosition;
+        }
+        
+        return result;
     }
 }

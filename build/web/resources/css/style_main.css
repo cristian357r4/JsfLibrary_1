@@ -112,6 +112,16 @@ table.book_preview p {
     margin-top: 0;
 }
 
+div.pagination a {
+    margin: 5px;
+}
+
+a.selected_page {
+    color: darkblue;
+    font-size: 120%;
+    font-weight: bold;
+}
+
 div.clear {
     clear: both;
 }
