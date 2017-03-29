@@ -15,10 +15,10 @@
             </ui:define>
             
             <ui:define name="content">
-                <p><strong>Найдено книг: #{searchController.totalBookCount}</strong></p>
+                <h:form rendered="#{searchController.totalBookCount >= 0}"><p><strong>#{searchController.totalBookCount >= 0 ? searchController.findedBooksCount : ""}</strong></p></h:form>
                 <h:dataTable value="#{searchController.currentBookList}" var="book" styleClass="book_preview" columnClasses="col1, col2, col3" rowClasses="row1, row2">
                     <h:column>
-                        <h:graphicImage value="/ShowImage?id=#{searchController.currentBookList.indexOf(book)}" />
+                        <a href="book_view.jsp?index=#{book.id}"><h:graphicImage value="/ShowImage?id=#{searchController.currentBookList.indexOf(book)}" /></a>
                     </h:column>
                     <h:column>
                         <div>

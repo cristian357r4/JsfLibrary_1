@@ -39,7 +39,7 @@
 
                     <div class=" search_letters">
                         <ui:repeat value="#{searchController.russianLetters}" var="letter">
-                            <h:commandLink action="#{searchController.fillBooksByLetter()}" value="#{letter}" styleClass="search_letter">
+                            <h:commandLink action="#{searchController.fillBooksByLetter()}" value="#{letter}" styleClass="#{searchController.selectedLetter == letter ? 'selected_letter' : ''}">
                                 <f:param name="search_letter" value="#{letter}" />
                             </h:commandLink>
                         </ui:repeat>
