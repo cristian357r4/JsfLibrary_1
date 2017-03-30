@@ -6,8 +6,11 @@
     <h:head>
         <title>#{msg.welcome_title}</title>
         <h:outputStylesheet library="css" name="style_index.css" />
+        <h:outputScript library="js" name="library.js" target="head" />
+        
     </h:head>
     <h:body>
+        
         <div class="main">
             <div class="content">
                 <p class="title"><h:graphicImage library="images" name="main-logo.gif" alt="main-logo"/></p>
@@ -19,7 +22,7 @@
                     #{msg.input_name} <h:inputText id="userName" value="#{user.userName}" required="true" requiredMessage="#{msg.login_required}">
                         <f:validator validatorId="beans.validators.LoginValidator" />
                     </h:inputText>
-                    <h:commandButton action="pages/books?faces-redirect=true" value="Войти"/>
+                    <h:commandButton action="pages/books?faces-redirect=true" value="Войти" onclick="return checkValue(this.form, '#{msg.login_required}');"/>
                     <p><h:message for="userName" styleClass="error" /></p>
                 </h:form>
             </div>
@@ -27,6 +30,19 @@
                 <p>#{msg.author_info}</p>
             </div>
         </div>
+        
+        <noscript>
+            <p>JavaScript отключен в браузере!</p>
+            <style type="text/css">
+                .main {
+                    display: none;
+                }
+                p {
+                    text-align: center;
+                }
+            </style>
+        </noscript>
+        
     </h:body>
 </html>
 
