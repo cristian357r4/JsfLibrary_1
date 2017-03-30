@@ -124,6 +124,10 @@ table.book_preview p {
     margin-top: 0;
 }
 
+div.pagination {
+    margin: 10px;
+}
+
 div.pagination a {
     margin: 5px;
 }

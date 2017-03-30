@@ -14,8 +14,14 @@
                 #{msg.book_list}
             </ui:define>
             
+            <ui:define name="book_count">
+                <h:form rendered="#{searchController.totalBookCount >= 0}">
+                    <p><strong>#{searchController.totalBookCount >= 0 ? searchController.findedBooksCount : ""}</strong></p>
+                </h:form>
+            </ui:define>
+            
             <ui:define name="content">
-                <h:form rendered="#{searchController.totalBookCount >= 0}"><p><strong>#{searchController.totalBookCount >= 0 ? searchController.findedBooksCount : ""}</strong></p></h:form>
+                
                 <h:dataTable value="#{searchController.currentBookList}" var="book" styleClass="book_preview" columnClasses="col1, col2, col3" rowClasses="row1, row2">
                     <h:column>
                         <a href="book_view.jsp?index=#{book.id}"><h:graphicImage value="/ShowImage?id=#{searchController.currentBookList.indexOf(book)}" /></a>
@@ -38,10 +44,12 @@
                         </div>
                     </h:column>
                 </h:dataTable>
+           </ui:define>
+            <ui:define name="paginator">
                 <div class="pagination">
                     <h:form rendered="#{searchController.totalBookCount > searchController.booksOnPage}" >
                         #{msg.pagination}: 
-                        
+
                         <ui:repeat value="#{searchController.pageNumbers}" var="pageNumber" >
                             <h:commandLink action="#{searchController.selectPage()}" value="#{pageNumber}" styleClass="#{pageNumber == searchController.selectedPageNumber ? 'selected_page' : ''}" >
                                 <f:param name="page_number" value="#{pageNumber}" />

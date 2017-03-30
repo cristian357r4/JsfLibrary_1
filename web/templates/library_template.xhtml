@@ -24,10 +24,16 @@
                     </ui:insert>
                 </div>
                 
+                <ui:insert name="book_count" />
+                
                 <div class="content">
+                    <ui:insert name="paginator" />
+                    
                     <ui:insert name="content">
                         <ui:include src="/templates/content.xhtml" />
                     </ui:insert>
+                    
+                    <ui:insert name="paginator" />
                 </div>
                 
             </div>
