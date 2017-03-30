@@ -5,6 +5,7 @@
  */
 package filters;
 
+import beans.User;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -159,6 +160,14 @@ public class CheckSessionFilter implements Filter {
         if (session == null || session.isNew()) {
             wrappedResponse.sendRedirect(wrappedRequest.getContextPath());
         } else {
+            if (session.getAttribute("user") != null) {
+                User user = (User) session.getAttribute("user");
+                if (user.getUserName() == null || "".equals(user.getUserName())) {
+                    wrappedResponse.sendRedirect(wrappedRequest.getContextPath());
+                }
+            } else {
+                wrappedResponse.sendRedirect(wrappedRequest.getContextPath());
+            }
             try {
                 chain.doFilter(wrappedRequest, wrappedResponse);
             } catch (Throwable t) {

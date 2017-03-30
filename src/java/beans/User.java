@@ -5,8 +5,6 @@
  */
 package beans;
 
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -15,8 +13,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author IT10
  */
-@Named(value = "user")
-@SessionScoped
+
 public class User implements Serializable {
 
     private String userName;

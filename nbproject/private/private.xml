@@ -6,14 +6,14 @@
             <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/web/templates/header.xhtml</file>
             <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/src/java/controllers/Books.java</file>
             <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/web/templates/left_menu.xhtml</file>
-            <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/src/java/controllers/EntityList.java</file>
+            <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/src/java/beans/User.java</file>
             <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/src/java/servlets/PdfContent.java</file>
             <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/web/WEB-INF/faces-config.xml</file>
-            <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/src/java/servlets/ShowImage.java</file>
             <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/web/WEB-INF/web.xml</file>
             <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/web/resources/css/style_main.css</file>
             <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/src/java/controllers/SearchController.java</file>
             <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/web/pages/books.xhtml</file>
+            <file>file:/C:/Users/it10/Documents/NetBeansProjects/JsfLibrary_1/src/java/filters/CheckSessionFilter.java</file>
         </group>
     </open-files>
 </project-private>

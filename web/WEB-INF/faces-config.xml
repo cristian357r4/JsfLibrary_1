@@ -51,4 +51,9 @@
         <managed-bean-class>controllers.BookImages</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>user</managed-bean-name>
+        <managed-bean-class>beans.User</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 </faces-config>
