@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 
 /**
@@ -28,7 +30,6 @@ public class SearchController implements Serializable {
     private static Map<String, SearchType> searchList = new HashMap<String, SearchType>();
 
     private static Character[] russianLetters;
-
     static {
         russianLetters = new Character[33];
 
@@ -37,8 +38,17 @@ public class SearchController implements Serializable {
             russianLetters[i++] = c;
         }
     }
+    
+    private static Integer[] booksOnPages;
+    static {
+        booksOnPages = new Integer[5];
+        for (int i = 0; i < 5; i++) {
+            booksOnPages[i] = i + 1;
+        }
+    }
 
     private int booksOnPage = 2;
+    private int newBooksOnPage = booksOnPage;
     private int startPosition = 0;
     private int endPosition = 0;
 
@@ -48,14 +58,16 @@ public class SearchController implements Serializable {
     private long selectedGenreId;
     private char selectedLetter;
 
-    private int selectedPageNumber;
+    private int selectedPageNumber = 0;
 
     Integer[] pageNumbers;
 
-    private String lastQuery;
+    private String lastQuery = "";
     private int lastGenreId;
     private String lastLetter;
     private String lastSearchString;
+    
+    private boolean isCountOnPaggeChanged;
 
     /**
      * Creates a new instance of SearchController
@@ -95,6 +107,14 @@ public class SearchController implements Serializable {
         this.booksOnPage = booksOnPage;
     }
 
+    public int getNewBooksOnPage() {
+        return newBooksOnPage;
+    }
+
+    public void setNewBooksOnPage(int newBooksOnPage) {
+        this.newBooksOnPage = newBooksOnPage;
+    }
+
     public int getStartPosition() {
         return startPosition;
     }
@@ -125,7 +145,7 @@ public class SearchController implements Serializable {
         this.pageNumbers = pageNumbers;
     }
 
-    public void setPagenumbers(int count) {
+    public void setPageNumbers(int count) {
         this.pageNumbers = new Integer[count];
 
         for (int i = 0; i < count; i++) {
@@ -135,7 +155,7 @@ public class SearchController implements Serializable {
 
     public void setPageNumbers() {
         int count = (int) Math.ceil(1.0 * this.totalBookCount / this.booksOnPage);
-        setPagenumbers(count);
+        setPageNumbers(count);
     }
 
     public int getSelectedPageNumber() {
@@ -236,6 +256,9 @@ public class SearchController implements Serializable {
     }
 
     public void fillBooksByGenre() {
+        
+        pause();
+        
         long id = getLastGenreId();
         
         setSelectedGenreId(id);
@@ -250,6 +273,9 @@ public class SearchController implements Serializable {
     }
 
     public void fillBooksByLetter() {
+        
+        pause();
+        
         String letter = getLastLetter();
         
         setSelectedLetter(letter.charAt(0));
@@ -264,6 +290,9 @@ public class SearchController implements Serializable {
     }
 
     public void fillBooksBySearch() {
+        
+        pause();
+        
         if (getLastSearchString() == null || "".equals(getLastSearchString())) {
             fillBooksAll();
         } else {
@@ -281,16 +310,30 @@ public class SearchController implements Serializable {
         return russianLetters;
     }
 
+    public static Integer[] getBooksOnPages() {
+        return booksOnPages;
+    }
+
     private Map<String, String> getParams() {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     }
 
-    public byte[] getImage(int id) {
-        return this.currentBookList.get(id).getImage();
+    public byte[] getImage(long id) {
+        for (Book book : currentBookList) {
+            if (book.getId() == id)
+                return book.getImage();
+        }
+        return new byte[0];
     }
 
     public void selectPage() {
-        this.selectedPageNumber = Integer.valueOf(getParams().get("page_number"));
+        
+        pause();
+        
+        if (getParams().get("page_number") == null || this.isCountOnPaggeChanged)
+            this.selectedPageNumber = getPageNumber();
+        else
+            this.selectedPageNumber = Integer.valueOf(getParams().get("page_number"));
         this.startPosition = booksOnPage * (selectedPageNumber - 1);
 //        this.endPosition = startPosition + booksOnPage;
         switch (getLastQuery()) {
@@ -307,6 +350,34 @@ public class SearchController implements Serializable {
                 fillBooksAll();
                 break;
         }
+    }
+    
+    public void selCountOnPage() {
+        
+        if ("".equals(getLastQuery()))
+            return;
+        
+        setPageNumbers();
+        this.isCountOnPaggeChanged = true;
+        selectPage();
+    }
+    
+    private int getPageNumber() {
+        
+        this.isCountOnPaggeChanged = false;
+        
+        int result = 1;
+        int currentTopBook = 1;
+        
+        if (selectedPageNumber > 0) {
+            currentTopBook = (selectedPageNumber - 1) * booksOnPage + 1;
+            
+            result = (int) Math.ceil(1.0 * currentTopBook / newBooksOnPage);
+        }
+        
+        booksOnPage = newBooksOnPage;
+        
+        return result;
     }
 
     private int[] getLimits() {
@@ -329,6 +400,20 @@ public class SearchController implements Serializable {
         this.startPosition = 0;
         setSelectedGenreId(-1);
         setSelectedLetter(' ');
+    }
+    
+    private void pause(int ... ms) {
+        int pause = 500;
+        try {
+            if (ms.length > 0)
+                pause = ms[0];
+            
+//            Thread.sleep(pause);
+            Thread.sleep(0);
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

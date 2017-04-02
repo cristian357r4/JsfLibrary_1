@@ -31,12 +31,12 @@ public class LoginValidator implements Validator{
             
             String newValue = arg2.toString();
             
+             if (newValue.length() > 0 && !Character.isLetter(newValue.charAt(0))) {
+                throw new IllegalArgumentException(bundle.getString("first_letter_error"));
+            }           
+            
             if (newValue.length() < 5) {
                 throw new IllegalArgumentException(bundle.getString("login_length_error"));
-            }
-            
-            if (!Character.isLetter(newValue.charAt(0))) {
-                throw new IllegalArgumentException(bundle.getString("first_letter_error"));
             }
             
             if (getTestArray().contains(newValue)) {

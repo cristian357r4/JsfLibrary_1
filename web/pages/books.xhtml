@@ -15,20 +15,20 @@
             </ui:define>
             
             <ui:define name="book_count">
-                <h:form rendered="#{searchController.totalBookCount >= 0}">
+                <h:form id="booksCount" rendered="#{searchController.totalBookCount >= 0}">
                     <p><strong>#{searchController.totalBookCount >= 0 ? searchController.findedBooksCount : ""}</strong></p>
                 </h:form>
             </ui:define>
             
             <ui:define name="content">
                 
-                <h:dataTable value="#{searchController.currentBookList}" var="book" styleClass="book_preview" columnClasses="col1, col2, col3" rowClasses="row1, row2">
+                <h:dataTable id="booksList" value="#{searchController.currentBookList}" var="book" styleClass="book_preview" columnClasses="col1, col2, col3" rowClasses="row1, row2">
                     <h:column>
-                        <a href="book_view.jsp?index=#{book.id}"><h:graphicImage value="/ShowImage?id=#{searchController.currentBookList.indexOf(book)}" /></a>
+                        <a href="#{facesContext.externalContext.applicationContextPath}/PdfContent?index=#{book.id}"><h:graphicImage value="/ShowImage?id=#{book.id}" alt="#{book.id}" title="#{book.name}" /></a>
                     </h:column>
                     <h:column>
                         <div>
-                            <p><a href="book_view.jsp?index=#{book.id}">#{book.name}</a></p>
+                            <p><a href="#{facesContext.externalContext.applicationContextPath}/PdfContent?index=#{book.id}">#{book.name}</a></p>
                             <p><strong>#{msg.author_name}: </strong>#{book.author}</p>
                             <p><strong>#{msg.page_count}: </strong>#{book.pageCount} #{msg.pages}</p>
                             <p><strong>#{msg.publisher}: </strong>#{book.publisher}</p>
@@ -48,13 +48,25 @@
             <ui:define name="paginator">
                 <div class="pagination">
                     <h:form rendered="#{searchController.totalBookCount > searchController.booksOnPage}" >
+
                         #{msg.pagination}: 
 
                         <ui:repeat value="#{searchController.pageNumbers}" var="pageNumber" >
-                            <h:commandLink action="#{searchController.selectPage()}" value="#{pageNumber}" styleClass="#{pageNumber == searchController.selectedPageNumber ? 'selected_page' : ''}" >
+                            <h:commandLink value="#{pageNumber}" styleClass="#{pageNumber == searchController.selectedPageNumber ? 'selected_page' : ''}" >
                                 <f:param name="page_number" value="#{pageNumber}" />
+                                <f:ajax onevent="showProgress" event="click" render=":header_form:letters :booksCount :booksList :pages_top :pages_bottom" listener="#{searchController.selectPage()}" />
                             </h:commandLink>
                         </ui:repeat>
+                    </h:form>
+                </div>
+            </ui:define>
+            <ui:define name="selectBooksOnPage" >
+                <div class="selectBooksOnPage" >
+                    <h:form rendered="#{searchController.totalBookCount > 0}" >
+                        <h:selectOneMenu value="#{searchController.newBooksOnPage}" >
+                            <f:selectItems value="#{searchController.getBooksOnPages()}" />
+                            <f:ajax event="valueChange" render=":header_form:letters :booksCount :booksOnPage_Top :booksList :pages_top :pages_bottom :booksOnPage_Bottom" listener="#{searchController.selCountOnPage()}" />
+                        </h:selectOneMenu>
                     </h:form>
                 </div>
             </ui:define>

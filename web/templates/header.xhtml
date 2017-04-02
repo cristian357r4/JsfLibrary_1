@@ -6,6 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
+        <h:outputScript library="js" name="library.js" target="head" />
     </h:head>
     <h:body>
         <ui:composition>
@@ -19,30 +20,41 @@
             </div>
 
             <div class="welcome">
+                
                 <h5>#{msg.welcome}, #{user.userName}</h5>
+                
                 <h:form>
                     <h:commandButton action="#{user.logOut()}" value="#{msg.exit}" />
-                </h:form>            
+                    <br />
+                </h:form>
+                
+                <ui:include src="/templates/locales.xhtml" />
+                
             </div>
             
             <div class="clear"></div>
             
             <div class="search_div">
-                <h:form styleClass="search_form">
+                <h:form id="header_form" styleClass="search_form">
                     <h:inputText id="search_string" styleClass="search_string" value="#{searchController.searchString}" />
                     
                     <h:selectOneMenu value="#{searchController.searchType}">
-                        <f:selectItems value="${searchController.searchList}" />
+                        <f:selectItems value="${searchTypeController.searchList}" />
                     </h:selectOneMenu>
                     
-                    <h:commandButton value="#{msg.search}" action="#{searchController.fillBooksBySearch()}" styleClass="search_button" />
+                    <h:commandButton value="#{msg.search}" styleClass="search_button" >
+                        <f:ajax onevent="showProgress" execute="@form" render="@form :header_form:letters :left_menu :booksCount :booksList :booksOnPage_Top :booksOnPage_Bottom :pages_top :pages_bottom" listener="#{searchController.fillBooksBySearch()}" />
+                    </h:commandButton>
 
                     <div class=" search_letters">
-                        <ui:repeat value="#{searchController.russianLetters}" var="letter">
-                            <h:commandLink action="#{searchController.fillBooksByLetter()}" value="#{letter}" styleClass="#{searchController.selectedLetter == letter ? 'selected_letter' : ''}">
-                                <f:param name="search_letter" value="#{letter}" />
-                            </h:commandLink>
-                        </ui:repeat>
+                        <h:panelGroup id="letters">
+                            <ui:repeat value="#{searchController.russianLetters}" var="letter">
+                                <h:commandLink value="#{letter}" styleClass="#{searchController.selectedLetter == letter ? 'selected_letter' : ''}">
+                                    <f:param name="search_letter" value="#{letter}" />
+                                    <f:ajax onevent="showProgress" event="click" render=":header_form:letters :left_menu :booksCount :booksList :booksOnPage_Top :booksOnPage_Bottom :pages_top :pages_bottom" listener="#{searchController.fillBooksByLetter()}" />
+                                </h:commandLink>
+                            </ui:repeat>
+                        </h:panelGroup>
                     </div>                    
                 </h:form>
             </div>

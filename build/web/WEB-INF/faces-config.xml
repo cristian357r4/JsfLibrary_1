@@ -56,4 +56,15 @@
         <managed-bean-class>beans.User</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <description>Change locale</description>
+        <managed-bean-name>localeChanger</managed-bean-name>
+        <managed-bean-class>beans.LocaleChanger</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>searchTypeController</managed-bean-name>
+        <managed-bean-class>controllers.SearchTypeController</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>

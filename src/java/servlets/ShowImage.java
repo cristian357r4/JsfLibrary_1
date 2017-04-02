@@ -38,7 +38,7 @@ public class ShowImage extends HttpServlet {
         try (OutputStream out = response.getOutputStream()) {
             /* TODO output your page here. You may use following sample code. */
             String paramIndex = request.getParameter("id");
-            int index = Integer.valueOf(paramIndex);
+            long index = Long.valueOf(paramIndex);
             
             HttpSession session = request.getSession(false);
             

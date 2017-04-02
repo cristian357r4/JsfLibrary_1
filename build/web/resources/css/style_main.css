@@ -19,6 +19,27 @@ div.container {
     width: 90%;
 }
 
+div.loading_height {
+    height: 25px;
+}
+
+div#loading_wrapper {
+    display: none;
+}
+
+div.loading_wrapper {
+    /*padding-top: 5px;*/
+    text-align: center;
+}
+
+.loading_wrapper span {
+    background-color: yellow;
+    /*font-family: Arial;*/
+    font-weight: bold;
+    letter-spacing: 2px;
+    padding: 0 2px;
+}
+
 div.header {
     border-bottom: 1px solid blue;
     text-align: center;
@@ -84,6 +105,11 @@ div.content {
     float: left;
 }
 
+#loading_image {
+    text-align: center;
+    margin-top: 25px;
+}
+
 table.book_preview {
     /*width: 65%;*/
 }
@@ -93,15 +119,18 @@ table.book_preview td{
 }
 
 .col1 {
-    width: 100px;
+    /*width: 100px;*/
+    width: 15%;
 }
 
 .col2 {
     width: 240px;
+    /*width: 20%;*/
 }
 
 .col3 {
     width: 350px;
+    /*width: 50%;*/
 }
 
 .row1 {

@@ -2,51 +2,73 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title><ui:insert name="title" /></title>
         <h:outputStylesheet library="css" name="style_main.css" />
+        <h:outputScript library="js" name="library.js" target="head" />
+        <link rel="shortcut icon" href="../resources/images/book.gif" />
     </h:head>
     <h:body>
-        <div class="container">
+        <f:view locale="#{localeChanger.locale}">
+            <div class="container">
             
-            <div class="header">
-                <ui:insert name="header">
-                    <ui:include src="/templates/header.xhtml" />
-                </ui:insert>
-            </div>
-            
-            <div class="middle">
-            
-                <div class="left_menu">
-                    <ui:insert name="left_menu">
-                        <ui:include src="../templates/left_menu.xhtml" />
+                <div class="loading_height">
+                    <div id="loading_wrapper" >
+                        <div class="loading_wrapper"><span>#{msg.loading_label}...</span></div>
+                    </div>
+                </div>
+
+                <div class="header">
+
+                    <ui:insert name="header">
+                        <ui:include src="/templates/header.xhtml" />
                     </ui:insert>
                 </div>
-                
-                <ui:insert name="book_count" />
-                
-                <div class="content">
-                    <ui:insert name="paginator" />
-                    
-                    <ui:insert name="content">
-                        <ui:include src="/templates/content.xhtml" />
-                    </ui:insert>
-                    
-                    <ui:insert name="paginator" />
+
+                <div class="middle">
+
+                    <div class="left_menu">
+                        <ui:insert name="left_menu">
+                            <ui:include src="../templates/left_menu.xhtml" />
+                        </ui:insert>
+                    </div>
+
+                    <div id="loading_image" style="display: none;">
+                        <h:graphicImage library="images" name="biblioteka2.png" alt="loading-image" title="loading image" />
+                    </div>
+
+                    <div id="books_panel">
+                        <ui:insert name="book_count" />
+
+                        <div id="test" class="content">
+                            <h:panelGroup id="booksOnPage_Top"><ui:insert name="selectBooksOnPage" /></h:panelGroup>
+
+                            <h:panelGroup id="pages_top"><ui:insert name="paginator" /></h:panelGroup>
+
+                            <ui:insert name="content">
+                                <ui:include src="/templates/content.xhtml" />
+                            </ui:insert>
+
+                            <h:panelGroup id="pages_bottom"><ui:insert name="paginator" /></h:panelGroup>
+
+                            <h:panelGroup id="booksOnPage_Bottom"><ui:insert name="selectBooksOnPage" /></h:panelGroup>
+                        </div>
+                    </div>
+
                 </div>
-                
+
+                <div class="clear"></div>
+
+                <div class="footer">
+                    <ui:insert name="footer">
+                        <ui:include src="/templates/footer.xhtml" />
+                    </ui:insert>
+                </div>
+
             </div>
-            
-            <div class="clear"></div>
-            
-            <div class="footer">
-                <ui:insert name="footer">
-                    <ui:include src="/templates/footer.xhtml" />
-                </ui:insert>
-            </div>
-            
-        </div>
+        </f:view>
     </h:body>
 </html>
 
