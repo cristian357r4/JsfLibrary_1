@@ -24,17 +24,39 @@
                 
                 <h:dataTable id="booksList" value="#{searchController.currentBookList}" var="book" styleClass="book_preview" columnClasses="col1, col2, col3" rowClasses="row1, row2">
                     <h:column>
-                        <a href="#{facesContext.externalContext.applicationContextPath}/PdfContent?index=#{book.id}"><h:graphicImage value="/ShowImage?id=#{book.id}" alt="#{book.id}" title="#{book.name}" /></a>
+                        <h:outputLink value="#{facesContext.externalContext.applicationContextPath}/PdfContent" >
+                            <f:param name="index" value="#{book.id}" />
+                            <h:graphicImage value="/ShowImage?id=#{book.id}" alt="#{book.id}" title="#{book.name}" />
+                        </h:outputLink>
                     </h:column>
                     <h:column>
                         <div>
-                            <p><a href="#{facesContext.externalContext.applicationContextPath}/PdfContent?index=#{book.id}">#{book.name}</a></p>
+                            
+                            <p>
+                                <h:outputLink value="#{facesContext.externalContext.applicationContextPath}/PdfContent" target="blank" >
+                                    <f:param name="index" value="#{book.id}" />
+                                    <h:outputText value="#{book.name}" />
+                                </h:outputLink>
+                            </p>
                             <p><strong>#{msg.author_name}: </strong>#{book.author}</p>
                             <p><strong>#{msg.page_count}: </strong>#{book.pageCount} #{msg.pages}</p>
                             <p><strong>#{msg.publisher}: </strong>#{book.publisher}</p>
                             <p><strong>#{msg.publish_year}: </strong>#{book.publishYear}</p>
                             
                             <p><strong>#{msg.isbn}: </strong>#{book.isbn}</p>
+                            
+                            <p>
+                                <h:outputLink value="#{facesContext.externalContext.applicationContextPath}/PdfContent" >
+                                    <f:param name="index" value="#{book.id}" />
+                                    <h:graphicImage value="/resources/images/book.gif" alt="#{msg.read}" />
+                                    <h:outputText value="#{msg.read}" />
+                                </h:outputLink>
+                                <h:outputLink value="#{facesContext.externalContext.applicationContextPath}/SavePdf" target="blank" >
+                                    <f:param name="id" value="#{book.id}" />
+                                    <h:graphicImage value="/resources/images/download.png" alt="#{msg.download}" />
+                                    <h:outputText value="#{msg.download}" />
+                                </h:outputLink>
+                            </p>
                         </div>
                     </h:column>
                     <h:column>
