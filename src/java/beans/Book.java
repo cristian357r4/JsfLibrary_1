@@ -131,13 +131,14 @@ public class Book extends Item {
     
     
     public void fillPdfContent() {
-        String query = "SELECT `content` FROM `book` WHERE `id` = " + this.id + " LIMIT 0,1;";
+        String query = "SELECT `name`, `content` FROM `book` WHERE `id` = " + this.id + " LIMIT 0,1;";
         Connection conn = Database.getConnection();
         try (
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(query);
                 ) {
             if (rs.next())
+                this.name = rs.getString("name");
                 this.content = rs.getBytes("content");
         } catch (SQLException ex) {
             this.content = new byte[0];

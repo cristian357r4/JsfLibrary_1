@@ -70,6 +70,18 @@
                                     <strong>#{msg.isbn}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.isbn}" />
                                     <h:inputText rendered="#{searchController.editMode}" value="#{book.isbn}" />
                                 </p>
+                                <p>
+                                <h:outputLink value="#{facesContext.externalContext.applicationContextPath}/PdfContent" >
+                                    <f:param name="index" value="#{book.id}" />
+                                    <h:graphicImage value="/resources/images/book.gif" alt="#{msg.read}" />
+                                    <h:outputText value="#{msg.read}" />
+                                </h:outputLink>
+                                <h:outputLink value="#{facesContext.externalContext.applicationContextPath}/SavePdf" target="blank" >
+                                    <f:param name="id" value="#{book.id}" />
+                                    <h:graphicImage value="/resources/images/download.png" alt="#{msg.download}" />
+                                    <h:outputText value="#{msg.download}" />
+                                </h:outputLink>
+                            </p>
                             </div>
                         </h:column>
                         <h:column>

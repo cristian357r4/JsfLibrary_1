@@ -9,17 +9,17 @@ import beans.Book;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.taglibs.standard.tag.common.core.Util;
 
 /**
  *
- * @author IT10
+ * @author Admin
  */
-public class PdfContent extends HttpServlet {
+public class SavePdf extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,17 +32,24 @@ public class PdfContent extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/pdf; charset=UTF-8");
+        response.setContentType("application/download; charset=UTF-8");
         try (OutputStream out = response.getOutputStream()) {
-            int index = Integer.valueOf(request.getParameter("index"));
+            /* TODO output your page here. You may use following sample code. */
+            long id = Long.valueOf(request.getParameter("id"));
             
             Book book = new Book();
-            book.setId(index);
+            book.setId(id);
             book.fillPdfContent();
-            byte[] pdfContent = book.getContent();
             
-            response.setContentLength(pdfContent.length);
-            out.write(pdfContent);
+            byte[] content = book.getContent();
+            
+            String fileName = Util.URLEncode(book.getName(), "UTF-8");
+            
+            response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".pdf");
+            response.setContentLength(content.length);
+            
+            out.write(content);
+            out.flush();
         }
     }
 

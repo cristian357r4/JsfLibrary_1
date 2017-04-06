@@ -21,6 +21,10 @@
         <servlet-name>ShowImage</servlet-name>
         <servlet-class>servlets.ShowImage</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SavePdf</servlet-name>
+        <servlet-class>servlets.SavePdf</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ShowImage</servlet-name>
         <url-pattern>/ShowImage</url-pattern>
@@ -36,6 +40,10 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SavePdf</servlet-name>
+        <url-pattern>/SavePdf</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
