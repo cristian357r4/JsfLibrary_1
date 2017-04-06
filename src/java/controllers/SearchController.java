@@ -367,8 +367,9 @@ public class SearchController implements Serializable {
     
     //--------------------------------------------------------------------------
     
-    public void updateBooks() {
-        
+    public String updateBooks() {
+        editMode = false;
+        return books.updateBooks(currentBookList);
     }
     
     //==========================================================================

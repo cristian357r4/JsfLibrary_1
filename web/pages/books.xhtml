@@ -25,12 +25,12 @@
                     
                     <h:panelGroup id="adminTools" >
                         <h:commandLink rendered="#{!searchController.editMode}" >
-                            <h:graphicImage library="images" name="add.jpg" alt="add" />
+                            <h:graphicImage library="images" name="book_add_1.ico" alt="add" width="50px" />
                             <h:outputText value="#{msg.add_book}" />
                             <f:ajax onevent="showProgress" execute="@form" render="@form" />
                         </h:commandLink>
                         <h:commandLink action="#{searchController.switchEditMode()}" rendered="#{!searchController.editMode}" >
-                            <h:graphicImage library="images" name="edit.jpg" alt="edit" />
+                            <h:graphicImage library="images" name="edit_1.png" alt="edit" width="50px" />
                             <h:outputText value="#{msg.edit}" />
                             <f:ajax onevent="showProgress" execute="@form" render="@form" />
                         </h:commandLink>
@@ -44,31 +44,34 @@
                     
                     <h:dataTable id="booksList" value="#{searchController.currentBookList}" var="book" styleClass="book_preview" columnClasses="col1, col2, col3" rowClasses="row1, row2">
                         <h:column>
-                            <a href="#{facesContext.externalContext.applicationContextPath}/PdfContent?index=#{book.id}"><h:graphicImage value="/ShowImage?id=#{book.id}" alt="#{book.id}" title="#{book.name}" /></a>
+                            <h:outputLink value="#{facesContext.externalContext.applicationContextPath}/PdfContent" >
+                                <f:param name="index" value="#{book.id}" />
+                                <h:graphicImage value="/ShowImage?id=#{book.id}" alt="#{book.id}" title="#{book.name}" />
+                            </h:outputLink>
                         </h:column>
                         <h:column>
                             <div>
                                 <p><a href="#{facesContext.externalContext.applicationContextPath}/PdfContent?index=#{book.id}">#{book.name}</a></p>
                                 <p>
                                     <strong>#{msg.author_name}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.author}" />
-                                    <h:inputText rendered="#{searchController.editMode}" value="#{book.author}" />
+                                    <br /><h:inputText rendered="#{searchController.editMode}" value="#{book.author}" />
                                 </p>
                                 <p>
                                     <strong>#{msg.page_count}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.pageCount} #{msg.pages}" />
-                                    <h:inputText rendered="#{searchController.editMode}" value="#{book.pageCount}" />
+                                    <br /><h:inputText rendered="#{searchController.editMode}" value="#{book.pageCount}" />
                                 </p>
                                 <p>
                                     <strong>#{msg.publisher}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.publisher}" />
-                                    <h:inputText rendered="#{searchController.editMode}" value="#{book.publisher}" />
+                                    <br /><h:inputText rendered="#{searchController.editMode}" value="#{book.publisher}" />
                                 </p>
                                 <p>
                                     <strong>#{msg.publish_year}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.publishYear}" />
-                                    <h:inputText rendered="#{searchController.editMode}" value="#{book.publishYear}" />
+                                    <br /><h:inputText rendered="#{searchController.editMode}" value="#{book.publishYear}" />
                                 </p>
 
                                 <p>
                                     <strong>#{msg.isbn}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.isbn}" />
-                                    <h:inputText rendered="#{searchController.editMode}" value="#{book.isbn}" />
+                                    <br /><h:inputText rendered="#{searchController.editMode}" value="#{book.isbn}" />
                                 </p>
                                 <p>
                                 <h:outputLink value="#{facesContext.externalContext.applicationContextPath}/PdfContent" >
@@ -89,7 +92,7 @@
                                 <p><strong>#{msg.descr}</strong></p>
                                 <p>
                                     <h:panelGroup rendered="#{!searchController.editMode}" >#{book.description}</h:panelGroup>
-                                    <h:inputTextarea rendered="#{searchController.editMode}" value="#{book.description}" />
+                                    <h:inputTextarea rendered="#{searchController.editMode}" value="#{book.description}" rows="15" cols="50" />
                                 </p>
                             </div>
                         </h:column>

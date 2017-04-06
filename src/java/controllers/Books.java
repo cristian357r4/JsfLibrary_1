@@ -6,11 +6,17 @@
 package controllers;
 
 import beans.Book;
+import db.Database;
 import enums.SearchType;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.ApplicationScoped;
 
@@ -69,7 +75,7 @@ public class Books extends EntityList<Book> {
                 + " ORDER BY b.name \n";
 
         query += addQueryLimit(limits);
-        
+
         setLastRowCount(query);
 
         lastQuery = query;
@@ -92,12 +98,9 @@ public class Books extends EntityList<Book> {
         query += addQueryLimit(limits);
 
 //        query = String.format(query, letter.toUpperCase());
-        
         setLastRowCount(query);
-        
-        lastQuery = query;
 
-        
+        lastQuery = query;
 
         return getList(query);
     }
@@ -122,10 +125,33 @@ public class Books extends EntityList<Book> {
         query.append(addQueryLimit(limits));
 
         setLastRowCount(query.toString());
-        
+
         lastQuery = query.toString();
 
         return getList(query.toString());
+    }
+
+    public String updateBooks(List<Book> booksList) {
+        this.conn = Database.getConnection();
+        String query = "UPDATE `book` SET name=?, isbn=?, page_count=?, publish_year=?, descr=? WHERE `id`=?";
+        try (PreparedStatement statement = conn.prepareStatement(query);) {
+            for (Book book : booksList) {
+                statement.setString(1, book.getName());
+                statement.setString(2, book.getIsbn());
+                statement.setInt(3, book.getPageCount());
+                statement.setInt(4, book.getPublishYear());
+                statement.setString(5, book.getDescription());
+                statement.setLong(6, book.getId());
+                
+                statement.addBatch();
+            }
+            
+            statement.executeBatch();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Books.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "books";
     }
 
     public int getQUERY_START_POSITION() {
