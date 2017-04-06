@@ -9,42 +9,81 @@
     </h:head>
     <h:body>
         <ui:composition template="/templates/library_template.xhtml">
-            
+
             <ui:define name="title">
                 #{msg.book_list}
             </ui:define>
-            
+
             <ui:define name="book_count">
                 <h:form id="booksCount" rendered="#{searchController.totalBookCount >= 0}">
                     <p><strong>#{searchController.totalBookCount >= 0 ? searchController.findedBooksCount : ""}</strong></p>
                 </h:form>
             </ui:define>
-            
+
             <ui:define name="content">
-                
-                <h:dataTable id="booksList" value="#{searchController.currentBookList}" var="book" styleClass="book_preview" columnClasses="col1, col2, col3" rowClasses="row1, row2">
-                    <h:column>
-                        <a href="#{facesContext.externalContext.applicationContextPath}/PdfContent?index=#{book.id}"><h:graphicImage value="/ShowImage?id=#{book.id}" alt="#{book.id}" title="#{book.name}" /></a>
-                    </h:column>
-                    <h:column>
-                        <div>
-                            <p><a href="#{facesContext.externalContext.applicationContextPath}/PdfContent?index=#{book.id}">#{book.name}</a></p>
-                            <p><strong>#{msg.author_name}: </strong>#{book.author}</p>
-                            <p><strong>#{msg.page_count}: </strong>#{book.pageCount} #{msg.pages}</p>
-                            <p><strong>#{msg.publisher}: </strong>#{book.publisher}</p>
-                            <p><strong>#{msg.publish_year}: </strong>#{book.publishYear}</p>
-                            
-                            <p><strong>#{msg.isbn}: </strong>#{book.isbn}</p>
-                        </div>
-                    </h:column>
-                    <h:column>
-                        <div class="book_details">
-                            <p><strong>#{msg.descr}</strong></p>
-                            <p>#{book.description}</p>
-                        </div>
-                    </h:column>
-                </h:dataTable>
-           </ui:define>
+                <h:form id="booksForm" >
+                    
+                    <h:panelGroup id="adminTools" >
+                        <h:commandLink rendered="#{!searchController.editMode}" >
+                            <h:graphicImage library="images" name="add.jpg" alt="add" />
+                            <h:outputText value="#{msg.add_book}" />
+                            <f:ajax onevent="showProgress" execute="@form" render="@form" />
+                        </h:commandLink>
+                        <h:commandLink action="#{searchController.switchEditMode()}" rendered="#{!searchController.editMode}" >
+                            <h:graphicImage library="images" name="edit.jpg" alt="edit" />
+                            <h:outputText value="#{msg.edit}" />
+                            <f:ajax onevent="showProgress" execute="@form" render="@form" />
+                        </h:commandLink>
+                        <h:commandButton action="#{searchController.updateBooks()}" rendered="#{searchController.editMode}" value="#{msg.save}" >
+                            <f:ajax execute="@form" render="@form" />
+                        </h:commandButton>
+                        <h:commandButton immediate="true" action="#{searchController.switchEditMode()}" rendered="#{searchController.editMode}" value="#{msg.cancel}" >
+                            <f:ajax execute="@form" render="@form" />
+                        </h:commandButton>
+                    </h:panelGroup>
+                    
+                    <h:dataTable id="booksList" value="#{searchController.currentBookList}" var="book" styleClass="book_preview" columnClasses="col1, col2, col3" rowClasses="row1, row2">
+                        <h:column>
+                            <a href="#{facesContext.externalContext.applicationContextPath}/PdfContent?index=#{book.id}"><h:graphicImage value="/ShowImage?id=#{book.id}" alt="#{book.id}" title="#{book.name}" /></a>
+                        </h:column>
+                        <h:column>
+                            <div>
+                                <p><a href="#{facesContext.externalContext.applicationContextPath}/PdfContent?index=#{book.id}">#{book.name}</a></p>
+                                <p>
+                                    <strong>#{msg.author_name}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.author}" />
+                                    <h:inputText rendered="#{searchController.editMode}" value="#{book.author}" />
+                                </p>
+                                <p>
+                                    <strong>#{msg.page_count}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.pageCount} #{msg.pages}" />
+                                    <h:inputText rendered="#{searchController.editMode}" value="#{book.pageCount}" />
+                                </p>
+                                <p>
+                                    <strong>#{msg.publisher}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.publisher}" />
+                                    <h:inputText rendered="#{searchController.editMode}" value="#{book.publisher}" />
+                                </p>
+                                <p>
+                                    <strong>#{msg.publish_year}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.publishYear}" />
+                                    <h:inputText rendered="#{searchController.editMode}" value="#{book.publishYear}" />
+                                </p>
+
+                                <p>
+                                    <strong>#{msg.isbn}: </strong><h:outputText rendered="#{!searchController.editMode}" value="#{book.isbn}" />
+                                    <h:inputText rendered="#{searchController.editMode}" value="#{book.isbn}" />
+                                </p>
+                            </div>
+                        </h:column>
+                        <h:column>
+                            <div class="book_details">
+                                <p><strong>#{msg.descr}</strong></p>
+                                <p>
+                                    <h:panelGroup rendered="#{!searchController.editMode}" >#{book.description}</h:panelGroup>
+                                    <h:inputTextarea rendered="#{searchController.editMode}" value="#{book.description}" />
+                                </p>
+                            </div>
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+            </ui:define>
             <ui:define name="paginator">
                 <div class="pagination">
                     <h:form rendered="#{searchController.totalBookCount > searchController.booksOnPage}" >
@@ -54,7 +93,7 @@
                         <ui:repeat value="#{searchController.pageNumbers}" var="pageNumber" >
                             <h:commandLink value="#{pageNumber}" styleClass="#{pageNumber == searchController.selectedPageNumber ? 'selected_page' : ''}" >
                                 <f:param name="page_number" value="#{pageNumber}" />
-                                <f:ajax onevent="showProgress" event="click" render=":header_form:letters :booksCount :booksList :pages_top :pages_bottom" listener="#{searchController.selectPage()}" />
+                                <f:ajax onevent="showProgress" event="click" render=":header_form:letters :booksCount :booksForm:booksList :pages_top :pages_bottom" listener="#{searchController.selectPage()}" />
                             </h:commandLink>
                         </ui:repeat>
                     </h:form>
@@ -65,7 +104,7 @@
                     <h:form rendered="#{searchController.totalBookCount > 0}" >
                         <h:selectOneMenu value="#{searchController.newBooksOnPage}" >
                             <f:selectItems value="#{searchController.getBooksOnPages()}" />
-                            <f:ajax event="valueChange" render=":header_form:letters :booksCount :booksOnPage_Top :booksList :pages_top :pages_bottom :booksOnPage_Bottom" listener="#{searchController.selCountOnPage()}" />
+                            <f:ajax event="valueChange" render=":header_form:letters :booksCount :booksOnPage_Top :booksForm:booksList :pages_top :pages_bottom :booksOnPage_Bottom" listener="#{searchController.selCountOnPage()}" />
                         </h:selectOneMenu>
                     </h:form>
                 </div>

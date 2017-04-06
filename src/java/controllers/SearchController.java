@@ -68,6 +68,8 @@ public class SearchController implements Serializable {
     private String lastSearchString;
     
     private boolean isCountOnPaggeChanged;
+    
+    private boolean editMode = false;
 
     /**
      * Creates a new instance of SearchController
@@ -243,7 +245,18 @@ public class SearchController implements Serializable {
         this.selectedLetter = selectedLetter;
     }
 
+    public boolean isEditMode() {
+        return editMode;
+    }
+
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
+    }
     
+    public void switchEditMode() {
+        this.editMode = !this.editMode;
+    }
+
     
 
 //----------------------------------------------------------------------------    
@@ -352,6 +365,13 @@ public class SearchController implements Serializable {
         }
     }
     
+    //--------------------------------------------------------------------------
+    
+    public void updateBooks() {
+        
+    }
+    
+    //==========================================================================
     public void selCountOnPage() {
         
         if ("".equals(getLastQuery()))
