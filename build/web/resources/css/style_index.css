@@ -25,7 +25,7 @@ div.main {
 }
 
 div.login_div {
-    margin-top: 50px;
+    /*margin-top: 50px;*/
 }
 
 form {
@@ -35,7 +35,25 @@ form {
     width: 350px;
 }
 
+.login_table {
+    margin: 0 auto;
+    width: 100%;
+}
+
+td.loading_image {
+    text-align: center;
+    vertical-align: middle;
+}
+
+td.loading_image img {
+    display: none;
+}
+
 .error {
     color: red;
     text-decoration: underline;
+}
+
+.locales img {
+    margin: 0 5px;
 }

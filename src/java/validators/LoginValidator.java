@@ -35,7 +35,7 @@ public class LoginValidator implements Validator{
                 throw new IllegalArgumentException(bundle.getString("first_letter_error"));
             }           
             
-            if (newValue.length() < 5) {
+            if (newValue.length() < 4) {
                 throw new IllegalArgumentException(bundle.getString("login_length_error"));
             }
             

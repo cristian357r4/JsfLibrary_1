@@ -41,6 +41,11 @@ function showProgress(data) {
     }
 }
 
+function showLoadingImage() {
+    document.getElementById("login_form:loading_image").style.display = "block";
+    var timer = setTimeout("document.getElementById('login_form:loading_image').style.display = 'block'", 500);
+}
+
 function test(message) {
     return prompt(message, 0);
 }

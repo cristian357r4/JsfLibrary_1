@@ -6,7 +6,13 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -41,14 +47,51 @@ public class User implements Serializable {
         this.password = password;
     }
     
+    public String logIn() {
+        
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        
+        try {
+            ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).login(userName, password);
+
+            return "books";
+        } catch (ServletException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext context = FacesContext.getCurrentInstance();
+            ResourceBundle bundle = ResourceBundle.getBundle("nls.messages", context.getViewRoot().getLocale());
+            FacesMessage message = new FacesMessage(bundle.getString("wrong_login_password"));
+            message.setSeverity(FacesMessage.SEVERITY_ERROR);
+            context.addMessage("login_form", message);
+        }
+        
+        return "index";
+    }
+    
     public String logOut() {
+        String result = "/index.xhtml?faces-redirect=thue";
         
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        session.invalidate();
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         
-        this.userName = null;
+        try {
+            request.logout();
+        } catch (ServletException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        return "exit";
+        context.getExternalContext().invalidateSession();
+//        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+//        session.invalidate();
+//        
+//        this.userName = null;
+//
+//        return "exit";
+        
+        return result;
     }
     
 }
