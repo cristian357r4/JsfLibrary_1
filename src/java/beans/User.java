@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 public class User implements Serializable {
 
     private String userName;
+    private String password;
     
     /**
      * Creates a new instance of User
@@ -30,6 +31,14 @@ public class User implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
     
     public String logOut() {

@@ -30,6 +30,7 @@ public class Book extends Item {
     private String publisher;
     private byte[] image;
     private String description;
+    boolean edit;
     
     public Book() {
         super();
@@ -126,6 +127,14 @@ public class Book extends Item {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
     }
     
     

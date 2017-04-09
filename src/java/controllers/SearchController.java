@@ -256,6 +256,10 @@ public class SearchController implements Serializable {
     public void switchEditMode() {
         this.editMode = !this.editMode;
     }
+    
+    public void cancelEdit() {
+        this.editMode = false;
+    }
 
     
 
@@ -269,6 +273,7 @@ public class SearchController implements Serializable {
     }
 
     public void fillBooksByGenre() {
+        cancelEdit();
         
         pause();
         
@@ -286,6 +291,7 @@ public class SearchController implements Serializable {
     }
 
     public void fillBooksByLetter() {
+        cancelEdit();
         
         pause();
         
@@ -303,6 +309,7 @@ public class SearchController implements Serializable {
     }
 
     public void fillBooksBySearch() {
+        cancelEdit();
         
         pause();
         
@@ -340,6 +347,7 @@ public class SearchController implements Serializable {
     }
 
     public void selectPage() {
+        cancelEdit();
         
         pause();
         
@@ -368,7 +376,7 @@ public class SearchController implements Serializable {
     //--------------------------------------------------------------------------
     
     public String updateBooks() {
-        editMode = false;
+        cancelEdit();
         return books.updateBooks(currentBookList);
     }
     

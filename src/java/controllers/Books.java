@@ -136,18 +136,23 @@ public class Books extends EntityList<Book> {
         String query = "UPDATE `book` SET name=?, isbn=?, page_count=?, publish_year=?, descr=? WHERE `id`=?";
         try (PreparedStatement statement = conn.prepareStatement(query);) {
             for (Book book : booksList) {
+                if (!book.isEdit()) {
+                    continue;
+                }
                 statement.setString(1, book.getName());
                 statement.setString(2, book.getIsbn());
                 statement.setInt(3, book.getPageCount());
                 statement.setInt(4, book.getPublishYear());
                 statement.setString(5, book.getDescription());
                 statement.setLong(6, book.getId());
-                
+
+                book.setEdit(false);
+
                 statement.addBatch();
             }
-            
+
             statement.executeBatch();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(Books.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -223,6 +228,7 @@ public class Books extends EntityList<Book> {
             book.setPublisher(publisher);
             book.setImage(image);
             book.setDescription(description);
+            book.setEdit(false);
 
         } catch (SQLException e) {
             e.printStackTrace();

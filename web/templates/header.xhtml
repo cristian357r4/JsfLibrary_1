@@ -43,7 +43,7 @@
                     </h:selectOneMenu>
                     
                     <h:commandButton value="#{msg.search}" styleClass="search_button" >
-                        <f:ajax onevent="showProgress" execute="@form" render="@form :header_form:letters :left_menu :booksCount :booksForm:booksList :booksOnPage_Top :booksOnPage_Bottom :pages_top :pages_bottom" listener="#{searchController.fillBooksBySearch()}" />
+                        <f:ajax onevent="showProgress" execute="@form" render="@form :header_form:letters :left_menu :booksCount :booksForm:adminTools :booksForm:booksList :booksOnPage_Top :booksOnPage_Bottom :pages_top :pages_bottom" listener="#{searchController.fillBooksBySearch()}" />
                     </h:commandButton>
 
                     <div class=" search_letters">
@@ -51,7 +51,7 @@
                             <ui:repeat value="#{searchController.russianLetters}" var="letter">
                                 <h:commandLink value="#{letter}" styleClass="#{searchController.selectedLetter == letter ? 'selected_letter' : ''}">
                                     <f:param name="search_letter" value="#{letter}" />
-                                    <f:ajax onevent="showProgress" event="click" render=":header_form:letters :left_menu :booksCount :booksForm:booksList :booksOnPage_Top :booksOnPage_Bottom :pages_top :pages_bottom" listener="#{searchController.fillBooksByLetter()}" />
+                                    <f:ajax onevent="showProgress" event="click" render=":header_form:letters :left_menu :booksCount :booksForm:adminTools :booksForm:booksList :booksOnPage_Top :booksOnPage_Bottom :pages_top :pages_bottom" listener="#{searchController.fillBooksByLetter()}" />
                                 </h:commandLink>
                             </ui:repeat>
                         </h:panelGroup>
