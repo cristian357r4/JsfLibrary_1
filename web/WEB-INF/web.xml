@@ -54,17 +54,17 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
     <security-constraint>
-        <display-name>pages</display-name>
+        <display-name>Constraint1</display-name>
         <web-resource-collection>
-            <web-resource-name>pages</web-resource-name>
-            <description>pages on this site</description>
-            <url-pattern>/pages/*</url-pattern>
+            <web-resource-name>Pages</web-resource-name>
+            <description>Pages on this site</description>
+            <url-pattern>/pages*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
             <role-name>admin</role-name>
-            <role-name>user</role-name>
             <role-name>moder</role-name>
+            <role-name>user</role-name>
         </auth-constraint>
         <user-data-constraint>
             <description/>
@@ -73,7 +73,7 @@
     </security-constraint>
     <login-config>
         <auth-method>FORM</auth-method>
-        <realm-name>jdbcRealm</realm-name>
+        <realm-name>jcbcRealm1</realm-name>
         <form-login-config>
             <form-login-page>/index.xhtml</form-login-page>
             <form-error-page>/index.xhtml</form-error-page>
@@ -84,12 +84,12 @@
         <role-name>admin</role-name>
     </security-role>
     <security-role>
-        <description>Normal user</description>
-        <role-name>user</role-name>
-    </security-role>
-    <security-role>
         <description>Moderator</description>
         <role-name>moder</role-name>
+    </security-role>
+    <security-role>
+        <description>User</description>
+        <role-name>user</role-name>
     </security-role>
     <resource-ref>
         <res-ref-name>jdbc/Library</res-ref-name>

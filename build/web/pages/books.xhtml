@@ -23,7 +23,7 @@
             <ui:define name="content">
                 <h:form id="booksForm" >
                     
-                    <h:panelGroup id="adminTools" >
+                    <h:panelGroup id="adminTools" rendered="#{request.isUserInRole('admin')}" >
                         <h:commandLink rendered="#{!searchController.editMode}" >
                             <h:graphicImage library="images" name="book_add_1.ico" alt="add" width="50px" />
                             <h:outputText value="#{msg.add_book}" />
@@ -34,7 +34,7 @@
                             <h:outputText value="#{msg.edit}" />
                             <f:ajax onevent="showProgress" execute="@form" render="@form" />
                         </h:commandLink>
-                        <h:commandButton action="#{searchController.updateBooks()}" rendered="#{searchController.editMode}" value="#{msg.save}" >
+                        <h:commandButton action="#{searchController.updateBooks()}" rendered="#{searchController.editMode and searchController.hasToEdit()}" value="#{msg.save}" >
                             <f:ajax execute="@form" render="@form" />
                         </h:commandButton>
                         <h:commandButton immediate="true" action="#{searchController.switchEditMode()}" rendered="#{searchController.editMode}" value="#{msg.cancel}" >

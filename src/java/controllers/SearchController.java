@@ -30,6 +30,7 @@ public class SearchController implements Serializable {
     private static Map<String, SearchType> searchList = new HashMap<String, SearchType>();
 
     private static Character[] russianLetters;
+
     static {
         russianLetters = new Character[33];
 
@@ -38,8 +39,9 @@ public class SearchController implements Serializable {
             russianLetters[i++] = c;
         }
     }
-    
+
     private static Integer[] booksOnPages;
+
     static {
         booksOnPages = new Integer[5];
         for (int i = 0; i < 5; i++) {
@@ -54,7 +56,7 @@ public class SearchController implements Serializable {
 
     private int totalBookCount;
     private String findedBooksCount;
-    
+
     private long selectedGenreId;
     private char selectedLetter;
 
@@ -66,9 +68,9 @@ public class SearchController implements Serializable {
     private int lastGenreId;
     private String lastLetter;
     private String lastSearchString;
-    
+
     private boolean isCountOnPaggeChanged;
-    
+
     private boolean editMode = false;
 
     /**
@@ -173,51 +175,52 @@ public class SearchController implements Serializable {
     }
 
     public int getLastGenreId() {
-        
+
         this.lastLetter = null;
         this.lastSearchString = null;
-        
+
         if (getParams().get("genre_id") != null) {
-            
+
             int tempId = Integer.valueOf(getParams().get("genre_id"));
-            if (tempId != lastGenreId)
+            if (tempId != lastGenreId) {
                 setDefaultParams();
-            
+            }
+
             lastGenreId = tempId;
         }
         return lastGenreId;
     }
 
     public String getLastLetter() {
-        
+
         this.lastGenreId = -1;
         this.lastSearchString = null;
-        
-        
+
         if (getParams().get("search_letter") != null) {
-            
-            if (!getParams().get("search_letter").equals(lastLetter))
+
+            if (!getParams().get("search_letter").equals(lastLetter)) {
                 setDefaultParams();
-            
+            }
+
             lastLetter = getParams().get("search_letter");
         }
         return lastLetter;
     }
 
     public String getLastSearchString() {
-        
+
         this.lastGenreId = -1;
         this.lastLetter = null;
-        
-        
+
         if (this.searchString != null) {
-            
-            if (!this.searchString.equals(lastSearchString))
+
+            if (!this.searchString.equals(lastSearchString)) {
                 setDefaultParams();
-            
+            }
+
             lastSearchString = searchString;
-        }        
-        
+        }
+
         return lastSearchString;
     }
 
@@ -252,16 +255,14 @@ public class SearchController implements Serializable {
     public void setEditMode(boolean editMode) {
         this.editMode = editMode;
     }
-    
+
     public void switchEditMode() {
         this.editMode = !this.editMode;
     }
-    
+
     public void cancelEdit() {
         this.editMode = false;
     }
-
-    
 
 //----------------------------------------------------------------------------    
     public void fillBooksAll() {
@@ -274,11 +275,11 @@ public class SearchController implements Serializable {
 
     public void fillBooksByGenre() {
         cancelEdit();
-        
+
         pause();
-        
+
         long id = getLastGenreId();
-        
+
         setSelectedGenreId(id);
 
         this.currentBookList = books.getBooksByGenre(id, getLimits());
@@ -292,11 +293,11 @@ public class SearchController implements Serializable {
 
     public void fillBooksByLetter() {
         cancelEdit();
-        
+
         pause();
-        
+
         String letter = getLastLetter();
-        
+
         setSelectedLetter(letter.charAt(0));
 
         this.currentBookList = books.getBooksByLetter(letter, getLimits());
@@ -310,9 +311,9 @@ public class SearchController implements Serializable {
 
     public void fillBooksBySearch() {
         cancelEdit();
-        
+
         pause();
-        
+
         if (getLastSearchString() == null || "".equals(getLastSearchString())) {
             fillBooksAll();
         } else {
@@ -340,21 +341,23 @@ public class SearchController implements Serializable {
 
     public byte[] getImage(long id) {
         for (Book book : currentBookList) {
-            if (book.getId() == id)
+            if (book.getId() == id) {
                 return book.getImage();
+            }
         }
         return new byte[0];
     }
 
     public void selectPage() {
         cancelEdit();
-        
+
         pause();
-        
-        if (getParams().get("page_number") == null || this.isCountOnPaggeChanged)
+
+        if (getParams().get("page_number") == null || this.isCountOnPaggeChanged) {
             this.selectedPageNumber = getPageNumber();
-        else
+        } else {
             this.selectedPageNumber = Integer.valueOf(getParams().get("page_number"));
+        }
         this.startPosition = booksOnPage * (selectedPageNumber - 1);
 //        this.endPosition = startPosition + booksOnPage;
         switch (getLastQuery()) {
@@ -373,39 +376,54 @@ public class SearchController implements Serializable {
         }
     }
     
+    public boolean hasToEdit() {
+        boolean result = false;
+
+        if (currentBookList == null || currentBookList.size() == 0) {
+            return false;
+        } else {
+            for (Book book : currentBookList) {
+                if (book.isEdit()) {
+                    return true;
+                }
+            }
+        }
+        return result;
+    }    
+
     //--------------------------------------------------------------------------
-    
     public String updateBooks() {
         cancelEdit();
         return books.updateBooks(currentBookList);
     }
-    
+
     //==========================================================================
     public void selCountOnPage() {
-        
-        if ("".equals(getLastQuery()))
+
+        if ("".equals(getLastQuery())) {
             return;
-        
+        }
+
         setPageNumbers();
         this.isCountOnPaggeChanged = true;
         selectPage();
     }
-    
+
     private int getPageNumber() {
-        
+
         this.isCountOnPaggeChanged = false;
-        
+
         int result = 1;
         int currentTopBook = 1;
-        
+
         if (selectedPageNumber > 0) {
             currentTopBook = (selectedPageNumber - 1) * booksOnPage + 1;
-            
+
             result = (int) Math.ceil(1.0 * currentTopBook / newBooksOnPage);
         }
-        
+
         booksOnPage = newBooksOnPage;
-        
+
         return result;
     }
 
@@ -423,26 +441,27 @@ public class SearchController implements Serializable {
 
         return result;
     }
-    
+
     private void setDefaultParams() {
         this.selectedPageNumber = 1;
         this.startPosition = 0;
         setSelectedGenreId(-1);
         setSelectedLetter(' ');
     }
-    
-    private void pause(int ... ms) {
+
+    private void pause(int... ms) {
         int pause = 500;
         try {
-            if (ms.length > 0)
+            if (ms.length > 0) {
                 pause = ms[0];
-            
+            }
+
 //            Thread.sleep(pause);
             Thread.sleep(0);
-            
+
         } catch (InterruptedException ex) {
             Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }
